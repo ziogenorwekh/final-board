@@ -31,11 +31,11 @@
         }
 
         $(document).ready(function () {
+            // 이메일 인증 전송
             $('#sendEmailBtn').click(function () {
                 const csrfToken = $('meta[name="_csrf"]').attr('content');
                 const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
-                const sendEmail = $('#email').val();
-                let sendData = JSON.stringify({"email": sendEmail});
+                const sendEmail = $('#emailVerifier').val();
                 if (!sendEmail) {
                     alert("이메일을 입력해주세요.");
                     return;
@@ -45,9 +45,8 @@
                     url: '/api/mail/send',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: sendData,
-                    async: true, //동기, 비동기 여부
-                    cache: false, // 캐시 여부
+                    data: JSON.stringify({"email": sendEmail}),
+                    async: true,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader(csrfHeader, csrfToken);
                         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -58,20 +57,17 @@
                         startCountdown();
                         $('#emailCodeSection').show();
                     },
-                    error: function (error) {
-                        const errorResponse = JSON.parse(error.responseText);
-                        const errorMessage = errorResponse[0].message;
-                        console.log(errorMessage);
-                        console.log(errorResponse);
+                    error: function () {
                         alert('이메일 전송에 실패했습니다. 다시 시도해주세요.');
                     }
                 });
             });
 
+            // 이메일 인증 코드 확인
             $('#verifyEmailBtn').click(function () {
                 const csrfToken = $('meta[name="_csrf"]').attr('content');
                 const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
-                const email = $('#email').val();
+                const email = $('#emailVerifier').val();
                 const code = $('#emailCode').val();
                 let data = JSON.stringify({email: email, code: code});
                 if (!code) {
@@ -85,16 +81,22 @@
                     contentType: 'application/json',
                     data: data,
                     dataType: 'text',
-                    async: false, //동기, 비동기 여부
-                    cache: false, // 캐시 여부
+                    async: false,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader(csrfHeader, csrfToken);
                     },
                     success: function () {
                         alert('이메일 인증이 완료되었습니다.');
+                        // 인증 후 모든 관련 필드를 비활성화
+                        $('#emailVerifier').prop('disabled', true);  // 이메일 입력 필드 비활성화
                         $('#verifiedEmail').val(email).prop('disabled', true);  // 이메일 값 자동 채우고 비활성화
-                        $('#signupForm').show();
-                        $('#emailSection').hide();
+                        $('#emailCode').prop('disabled', true);  // 인증 코드 입력 필드 비활성화
+                        $('#sendEmailBtn').hide();  // 인증 이메일 보내기 버튼 숨기기
+                        $('#emailCodeSection').hide();  // 인증 코드 입력란 숨기기
+                        $('#timer').hide();  // 타이머 숨기기
+                        // 회원가입 버튼 활성화
+                        $('#signupBtn').prop('disabled', false);
+                        $('#email').val(email);
                     },
                     error: function () {
                         alert('인증 코드가 올바르지 않습니다.');
@@ -102,6 +104,7 @@
                 });
             });
 
+            // 비밀번호 확인
             $('#confirmPassword').on('input', function () {
                 const password = $('#password').val();
                 const confirmPassword = $(this).val();
@@ -121,55 +124,49 @@
         <h1>회원가입</h1>
     </header>
 
-    <section id="emailSection">
-        <h2>이메일 인증</h2>
-        <p>이메일을 입력하고 인증 코드를 받으세요.</p>
-        <div>
-            <label for="email">이메일:</label>
-            <input type="email" id="email" name="email" placeholder="example@domain.com" required>
-            <button type="button" id="sendEmailBtn" class="btn">인증 이메일 보내기</button>
-
+    <form th:action="@{/user/created}" method="post" th:object="${userCreateCommand}">
+        <div class="form-group">
+<!--           바인딩에 걸리면 다시 이메일 인증해야 됌 참고하셈-->
+            <label for="emailVerifier">이메일:</label>
+            <input type="email" id="emailVerifier" name="emailVerifier" placeholder="example@domain.com" required>
+            <!-- 이메일 값 전달을 위한 hidden 필드 -->
+            <button type="button" id="sendEmailBtn" class="btn" th:disabled="${verifiedMail != null}">인증 이메일 보내기</button>
+            <div id="emailCodeSection" style="display: none;">
+                <label for="emailCode">인증 코드:</label>
+                <input type="text" id="emailCode" name="emailCode" placeholder="인증 코드 입력" required>
+                <button type="button" id="verifyEmailBtn" class="btn">인증 코드 확인</button>
+                <p>남은 시간: <span id="timer">05:00</span></p>
+            </div>
+            <div th:if="${#fields.hasErrors('email')}" class="error">
+                <span th:errors="*{email}"></span>
+            </div>
         </div>
-        <div id="emailCodeSection" style="display: none;">
-            <label for="emailCode">인증 코드:</label>
-            <input type="text" id="emailCode" name="emailCode" placeholder="인증 코드 입력" required>
-            <button type="button" id="verifyEmailBtn" class="btn">인증 코드 확인</button>
+        <input type="hidden" id="email" name="email" th:field="*{email}">
+        <div class="form-group">
+            <label for="username">아이디:</label>
+            <input type="text" id="username" name="username" th:field="*{username}" placeholder="아이디 입력" required>
+            <div th:if="${#fields.hasErrors('username')}" class="error">
+                <span th:errors="*{username}"></span>
+            </div>
         </div>
-        <p>남은 시간: <span id="timer">05:00</span></p>
-    </section>
 
-    <section id="signupForm" style="display: none;">
-        <h2>회원가입</h2>
-        <form th:action="@{/user/created}" method="post" th:object="${userCreateCommand}">
-            <div class="form-group">
-                <label for="verifiedEmail">이메일:</label>
-                <input type="text" id="verifiedEmail" name="verifiedEmail" th:field="*{email}" disabled>
-                <div th:if="${#fields.hasErrors('email')}" class="error">
-                    <span th:errors="*{email}"></span>
-                </div>
+        <div class="form-group">
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" th:field="*{password}" placeholder="비밀번호 입력" required>
+            <div th:if="${#fields.hasErrors('password')}" class="error">
+                <span th:errors="*{password}"></span>
             </div>
-            <div class="form-group">
-                <label for="username">아이디:</label>
-                <input type="text" id="username" name="username" th:field="*{username}" placeholder="아이디 입력" required>
-                <div th:if="${#fields.hasErrors('username')}" class="error">
-                    <span th:errors="*{username}"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password">비밀번호:</label>
-                <input type="password" id="password" name="password" th:field="*{password}" placeholder="비밀번호 입력" required>
-                <div th:if="${#fields.hasErrors('password')}" class="error">
-                    <span th:errors="*{password}"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">비밀번호 확인:</label>
-                <input type="password" id="confirmPassword" placeholder="비밀번호 확인" required>
-                <small id="passwordMessage"></small>
-            </div>
-            <button type="submit" class="btn">회원가입</button>
-        </form>
-    </section>
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">비밀번호 확인:</label>
+            <input type="password" id="confirmPassword" placeholder="비밀번호 확인" required>
+            <small id="passwordMessage"></small>
+        </div>
+
+        <button type="submit" id="signupBtn" class="btn" disabled>회원가입</button>
+    </form>
+
 </div>
 </body>
 </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>로그인</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1>로그인</h1>
+    </header>
+
+    <section class="login-section">
+        <form th:action="@{/login}" method="post" th:object="${loginVO}">
+            <div class="form-group">
+                <label for="username">아이디:</label>
+                <input type="text" id="username" name="username" placeholder="이메일 입력" th:field="*{username}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호:</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호 입력" th:field="*{password}" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn">로그인</button>
+            </div>
+        </form>
+    </section>
+
+    <footer class="footer">
+        <p>아직 계정이 없으신가요? <a href="/signup">회원가입</a></p>
+    </footer>
+</div>
+</body>
+</html>

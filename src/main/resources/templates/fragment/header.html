@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Board</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+<!-- 네비게이션 바 -->
+<nav class="navbar" th:fragment="header">
+    <div class="navbar-left">
+        <a href="/" class="navbar-brand">Blog</a>
+    </div>
+    <div class="navbar-right">
+        <!-- 로그인 여부에 따라 표시 -->
+        <span sec:authorize="!isAuthenticated()">
+            <a href="/login">로그인</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <div class="dropdown">
+                <button class="dropbtn" sec:authentication="principal.username">
+                    <span sec:authentication="principal.username">${principal.username}</span>
+                </button>
+                <div class="dropdown-content">
+<!--                     수정 필요-->
+                    <a href="/user/{이거수정해야됌}"/>회원정보</a>
+                    <a href="/logout">로그아웃</a>
+                </div>
+            </div>
+        </span>
+    </div>
+</nav>
+<script>
+    // 드롭다운 메뉴 활성화
+    $(".dropbtn").click(function () {
+        $(this).next(".dropdown-content").toggle();
+    });
+</script>
+
+</body>
+</html>

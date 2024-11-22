@@ -1,5 +1,6 @@
 package store.shportfolio.board.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +10,7 @@ import store.shportfolio.board.domain.User;
 import store.shportfolio.board.jpa.UserEntity;
 import store.shportfolio.board.jpa.UserRepository;
 
+@Slf4j
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -26,6 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         User user = new User(userEntity);
+        log.info("User: {}", user);
         return new CustomUserDetails(user);
     }
 }

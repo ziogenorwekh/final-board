@@ -7,5 +7,5 @@ import store.shportfolio.board.vo.VerifyCodeVO;
 public interface MailService {
 
     void sendMail(SendEmailVO sendEmailVO);
-    Boolean verifyMail(VerifyCodeVO verifyCodeVOv);
+    Boolean verifyMail(VerifyCodeVO verifyCodeVOv,String sessionId);
 }

@@ -42,6 +42,7 @@ public class UserServiceTest {
 
     private UUID userId;
     private UserEntity userEntity;
+    private final String username = "testuser";
 
     @BeforeEach
     public void setUp() {
@@ -97,7 +98,7 @@ public class UserServiceTest {
     @DisplayName("유저 조회")
     public void userUpdateTest() {
         // given
-        UserTrackQuery userTrackQuery = new UserTrackQuery(userId);
+        UserTrackQuery userTrackQuery = new UserTrackQuery(username);
         UserEntity mockUserEntity = Mockito.mock(UserEntity.class);
 
         Mockito.when(userRepository.findById(Mockito.eq(userId))).thenReturn(Optional.of(mockUserEntity));
@@ -111,7 +112,7 @@ public class UserServiceTest {
                         .build());
 
         // when
-        UserTrackQueryResponse response = userService.findUserById(userTrackQuery);
+        UserTrackQueryResponse response = userService.findUserByUsername(userTrackQuery);
 
         // then
         Assertions.assertNotNull(response);

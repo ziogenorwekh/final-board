@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserTrackQueryResponse findUserById(UserTrackQuery userTrackQuery) {
+    public UserTrackQueryResponse findUserByUsername(UserTrackQuery userTrackQuery) {
 
-        UserEntity userEntity = userRepository.findById(userTrackQuery.getUserId()).orElseThrow(() ->
-                new UserNotFoundException(String.format("User with id %s not found", userTrackQuery.getUserId())));
+        UserEntity userEntity = userRepository.findByUsername(userTrackQuery.getUsername()).orElseThrow(() ->
+                new UserNotFoundException(String.format("User with username %s not found", userTrackQuery.getUsername())));
         User user = new User(userEntity);
         log.info("Found user with data is : {}", user);
         return userMapper.toUserTrackQueryResponse(user);

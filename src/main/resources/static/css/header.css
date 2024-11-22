@@ -1,0 +1,148 @@
+/* 기존 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    text-align: center;
+    color: #009538;
+    margin-bottom: 20px;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 15px;
+    color: white;
+    align-items: center;
+}
+
+.navbar-left a {
+    font-size: 24px;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-left a:hover {
+    color: #009538;
+}
+
+.navbar-right a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.navbar-right a:hover {
+    color: #009538;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dropbtn:hover {
+    background-color: #009538;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+    border-radius: 4px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+form .form-group {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form .btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #009538;
+    color: white;
+    border: none;
+    margin-top: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+form .btn:hover {
+    background-color: #009538;
+}
+
+#passwordMessage {
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}

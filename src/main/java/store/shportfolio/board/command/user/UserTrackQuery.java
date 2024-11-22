@@ -13,10 +13,10 @@ import java.util.UUID;
 public class UserTrackQuery {
 
     @NotNull
-    @Schema(description = "User ID", example = "123e4567-e89b-12d3-a456-426614174000", required = true)
-    private UUID userId;
+    @Schema(description = "Username of the user", example = "john_doe")
+    private String username;
     @Builder
-    public UserTrackQuery(UUID userId) {
-        this.userId = userId;
+    public UserTrackQuery(String username) {
+        this.username = username;
     }
 }

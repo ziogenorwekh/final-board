@@ -1,5 +1,6 @@
 package store.shportfolio.board.api;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,9 @@ public class MailResource {
         this.mailService = mailService;
     }
 
-    @GetMapping("/hi")
-    public String hi() {
-        return "hi";
-    }
-
-    @RequestMapping(value = "/mail/send", produces ="application/json", method = RequestMethod.POST)
+    @RequestMapping(value = "/mail/send", produces = "application/json", method = RequestMethod.POST)
     public ResponseEntity<Map> sendEmailCode(@Valid @RequestBody SendEmailVO sendEmailVO) {
-        log.debug("send email, sendEmailVO: {}", sendEmailVO);
+        log.info("send email, sendEmailVO: {}", sendEmailVO);
         try {
             mailService.sendMail(sendEmailVO);
             Map<String, String> response = new HashMap<>();
@@ -47,10 +43,12 @@ public class MailResource {
         }
     }
 
-    @RequestMapping(value = "/mail/verify", produces ="application/json", method = RequestMethod.POST)
-    public ResponseEntity<String> verifyEmailAuthenticationCode(@Valid @RequestBody VerifyCodeVO verifyCodeVO) {
+    @RequestMapping(value = "/mail/verify", produces = "application/json", method = RequestMethod.POST)
+    public ResponseEntity<String> verifyEmailAuthenticationCode(@Valid @RequestBody VerifyCodeVO verifyCodeVO,
+                                                                HttpSession session) {
         log.info("verify email: {}", verifyCodeVO);
-        Boolean isVerify = mailService.verifyMail(verifyCodeVO);
+        String sessionId = session.getId();
+        Boolean isVerify = mailService.verifyMail(verifyCodeVO, sessionId);
         log.info("isVerify: {}", isVerify);
         if (!isVerify) {
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("email authentication code is incorrect.");

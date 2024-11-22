@@ -23,8 +23,6 @@ public class UserCreateCommand {
     @Schema(description = "Password of the user", example = "password123")
     private String password;
 
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
     @Schema(description = "Email address of the user", example = "user@example.com")
     private String email;
 

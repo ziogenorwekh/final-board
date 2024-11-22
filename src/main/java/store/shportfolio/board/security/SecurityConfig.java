@@ -37,9 +37,11 @@ public class SecurityConfig {
         http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
+
         http.authorizeRequests(auth->{
             try {
                 auth.requestMatchers(HttpMethod.POST,"/api/mail/send","/api/mail/verify").permitAll()
+                        .requestMatchers("user/delete").authenticated()
                         .and()
                         .csrf(httpSecurityCsrfConfigurer ->
                                 httpSecurityCsrfConfigurer.ignoringRequestMatchers("/api/**")
@@ -53,7 +55,10 @@ public class SecurityConfig {
         // 2. 로그인 설정
         http.formLogin(formLogin -> formLogin
                 .loginPage("/login") // 사용자 정의 로그인 페이지 경로
+                .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true) // 로그인 성공 시 이동할 기본 페이지
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .failureUrl("/login?error=true") // 로그인 실패 시 이동할 URL
                 .permitAll() // 로그인 페이지 접근 허용
         );

@@ -17,7 +17,7 @@ body {
 
 .header h1 {
     text-align: center;
-    color: #007BFF;
+    color: #009538;
     margin-bottom: 20px;
 }
 
@@ -51,7 +51,7 @@ form input[type="checkbox"] {
 form .btn {
     width: 100%;
     padding: 10px;
-    background-color: #007BFF;
+    background-color: #009538;
     color: white;
     border: none;
     border-radius: 4px;
@@ -60,7 +60,7 @@ form .btn {
 }
 
 form .btn:hover {
-    background-color: #0056b3;
+    background-color: #009538;
 }
 
 .footer {
@@ -69,7 +69,7 @@ form .btn:hover {
 }
 
 .footer a {
-    color: #007BFF;
+    color: #009538;
     text-decoration: none;
 }
 

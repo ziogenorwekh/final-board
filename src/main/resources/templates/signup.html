@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <title>회원가입</title>
+    <title>이메일 인증</title>
     <link rel="stylesheet" href="/css/signup.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
@@ -87,33 +86,12 @@
                     },
                     success: function () {
                         alert('이메일 인증이 완료되었습니다.');
-                        // 인증 후 모든 관련 필드를 비활성화
-                        $('#emailVerifier').prop('disabled', true);  // 이메일 입력 필드 비활성화
-                        $('#verifiedEmail').val(email).prop('disabled', true);  // 이메일 값 자동 채우고 비활성화
-                        $('#emailCode').prop('disabled', true);  // 인증 코드 입력 필드 비활성화
-                        $('#sendEmailBtn').hide();  // 인증 이메일 보내기 버튼 숨기기
-                        $('#emailCodeSection').hide();  // 인증 코드 입력란 숨기기
-                        $('#timer').hide();  // 타이머 숨기기
-                        // 회원가입 버튼 활성화
-                        $('#signupBtn').prop('disabled', false);
-                        $('#email').val(email);
+                        window.location.href = '/signup/form'
                     },
                     error: function () {
                         alert('인증 코드가 올바르지 않습니다.');
                     }
                 });
-            });
-
-            // 비밀번호 확인
-            $('#confirmPassword').on('input', function () {
-                const password = $('#password').val();
-                const confirmPassword = $(this).val();
-                const message = $('#passwordMessage');
-                if (confirmPassword === password) {
-                    message.text('비밀번호가 일치합니다.').css('color', 'green');
-                } else {
-                    message.text('비밀번호가 일치하지 않습니다.').css('color', 'red');
-                }
             });
         });
     </script>
@@ -121,52 +99,36 @@
 <body>
 <div class="container">
     <header class="header">
-        <h1>회원가입</h1>
+        <h1>이메일 인증</h1>
     </header>
 
-    <form th:action="@{/user/created}" method="post" th:object="${userCreateCommand}">
+    <form>
         <div class="form-group">
-<!--           바인딩에 걸리면 다시 이메일 인증해야 됌 참고하셈-->
             <label for="emailVerifier">이메일:</label>
             <input type="email" id="emailVerifier" name="emailVerifier" placeholder="example@domain.com" required>
             <!-- 이메일 값 전달을 위한 hidden 필드 -->
-            <button type="button" id="sendEmailBtn" class="btn" th:disabled="${verifiedMail != null}">인증 이메일 보내기</button>
+            <button type="button" id="sendEmailBtn" class="btn">인증 이메일
+                보내기
+            </button>
             <div id="emailCodeSection" style="display: none;">
                 <label for="emailCode">인증 코드:</label>
                 <input type="text" id="emailCode" name="emailCode" placeholder="인증 코드 입력" required>
                 <button type="button" id="verifyEmailBtn" class="btn">인증 코드 확인</button>
                 <p>남은 시간: <span id="timer">05:00</span></p>
             </div>
-            <div th:if="${#fields.hasErrors('email')}" class="error">
-                <span th:errors="*{email}"></span>
-            </div>
         </div>
-        <input type="hidden" id="email" name="email" th:field="*{email}">
-        <div class="form-group">
-            <label for="username">아이디:</label>
-            <input type="text" id="username" name="username" th:field="*{username}" placeholder="아이디 입력" required>
-            <div th:if="${#fields.hasErrors('username')}" class="error">
-                <span th:errors="*{username}"></span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="password">비밀번호:</label>
-            <input type="password" id="password" name="password" th:field="*{password}" placeholder="비밀번호 입력" required>
-            <div th:if="${#fields.hasErrors('password')}" class="error">
-                <span th:errors="*{password}"></span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="confirmPassword">비밀번호 확인:</label>
-            <input type="password" id="confirmPassword" placeholder="비밀번호 확인" required>
-            <small id="passwordMessage"></small>
-        </div>
-
-        <button type="submit" id="signupBtn" class="btn" disabled>회원가입</button>
+<!--        <div class="form-group">-->
+<!--            <label for="emailVerifier">이메일:</label>-->
+<!--            <input type="email" id="emailVerifier" name="emailVerifier" placeholder="example@domain.com" required>-->
+<!--            <button type="button" id="sendEmailBtn" class="btn">인증 이메일 보내기</button>-->
+<!--            <div id="emailCodeSection" style="display: none;">-->
+<!--                <label for="emailCode">인증 코드:</label>-->
+<!--                <input type="text" id="emailCode" name="emailCode" placeholder="인증 코드 입력" required>-->
+<!--                <button type="button" id="verifyEmailBtn" class="btn">인증 코드 확인</button>-->
+<!--                <p>남은 시간: <span id="timer">05:00</span></p>-->
+<!--            </div>-->
+<!--        </div>-->
     </form>
-
 </div>
 </body>
 </html>

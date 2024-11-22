@@ -1,16 +1,14 @@
 package store.shportfolio.board.mail;
 
+import store.shportfolio.board.cache.CustomCacheManager;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import store.shportfolio.board.vo.SendEmailVO;
 import store.shportfolio.board.vo.VerifyCodeVO;
 
@@ -21,63 +19,46 @@ import java.util.Random;
 public class MailServiceImpl implements MailService {
 
     private final JavaMailSender javaMailSender;
-    private final CacheManager cacheManager;
+    private final CustomCacheManager customCacheManager;
 
     @Autowired
-    public MailServiceImpl(JavaMailSender javaMailSender, CacheManager cacheManager) {
+    public MailServiceImpl(JavaMailSender javaMailSender, CustomCacheManager customCacheManager) {
         this.javaMailSender = javaMailSender;
-        this.cacheManager = cacheManager;
+        this.customCacheManager = customCacheManager;
     }
 
     @Override
     public void sendMail(SendEmailVO sendEmailVO) {
-        Random random = new Random();
-        String code = "";
-        for (int i = 0; i < 6; i++) {
-            int number = random.nextInt(888888) + 111111; // 6자리 랜덤 숫자 생성
-            code = String.valueOf(number); // 인증번호 설정
-        }
+        String code = generateRandomCode();
 
-        log.info("create email code: {}", code);
+        log.info("Generated email code: {}", code);
 
-        saveCodeToCache(sendEmailVO.getEmail(), code);
+        // 인증 코드 저장
+        customCacheManager.save(sendEmailVO.getEmail(), code);
 
         // 인증 메일 발송
         sendActivationEmail(sendEmailVO.getEmail(), code);
     }
 
     @Override
-    public Boolean verifyMail(VerifyCodeVO verifyCodeVOv) {
-        log.debug("verifyCodeVOv: {}", verifyCodeVOv);
-        // 캐시에서 이메일을 찾고 인증 코드가 일치하는지 확인
-        String cachedCode = getCodeFromCache(verifyCodeVOv.getEmail());
+    public Boolean verifyMail(VerifyCodeVO verifyCodeVO, String sessionId) {
+        log.debug("Verify request: {}", verifyCodeVO);
 
-        if (cachedCode != null && cachedCode.equals(verifyCodeVOv.getCode())) {
-            deleteCodeFromCache(verifyCodeVOv.getEmail());
+        // 캐시에서 이메일을 찾고 인증 코드가 일치하는지 확인
+        String cachedCode = customCacheManager.getCodeWithEmail(verifyCodeVO.getEmail());
+
+        if (cachedCode != null && cachedCode.equals(verifyCodeVO.getCode())) {
+            customCacheManager.deleteCode(verifyCodeVO.getEmail());
+            customCacheManager.save(sessionId, verifyCodeVO.getEmail());
             return true; // 인증 코드가 일치하면 true 반환
         }
         return false; // 일치하지 않으면 false 반환
     }
 
-    private String saveCodeToCache(String email, String code) {
-        Cache cache = cacheManager.getCache("verificationCodes");
-        cache.evict(email);
-        cache.put(email, code);
-        log.info("save email code: {}", code);
-        return code;
+    private String generateRandomCode() {
+        Random random = new Random();
+        return String.format("%06d", random.nextInt(900000) + 100000); // 6자리 랜덤 숫자
     }
-
-    private String getCodeFromCache(String email) {
-        Cache cache = cacheManager.getCache("verificationCodes");
-        String code = cache.get(email, String.class);
-        log.info("get email :{},  code: {}", email, code);
-        return code;
-    }
-
-    private void deleteCodeFromCache(String email) {
-        cacheManager.getCache("verificationCodes").evict(email);
-    }
-
 
     private void sendActivationEmail(String email, String code) {
         try {

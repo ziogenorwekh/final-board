@@ -7,7 +7,7 @@ public interface UserService {
 
     UserCreateResponse createUser(@Valid UserCreateCommand userCreateCommand);
 
-    UserTrackQueryResponse findUserById(@Valid UserTrackQuery userTrackQuery);
+    UserTrackQueryResponse findUserByUsername(@Valid UserTrackQuery userTrackQuery);
 
     void updateUser(@Valid UserUpdateCommand userUpdateCommand);
 

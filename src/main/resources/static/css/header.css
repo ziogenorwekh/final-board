@@ -1,4 +1,4 @@
-/* 기존 스타일 */
+/* 기존 스타일 유지 */
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -6,23 +6,6 @@ body {
     padding: 0;
 }
 
-.container {
-    max-width: 500px;
-    margin: 50px auto;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.header h1 {
-    text-align: center;
-    color: #009538;
-    margin-bottom: 20px;
-}
-
-/* 네비게이션 바 스타일 */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -33,7 +16,7 @@ body {
 }
 
 .navbar-left a {
-    font-size: 24px;
+    font-size: 28px;
     color: white;
     text-decoration: none;
 }
@@ -46,12 +29,14 @@ body {
     color: white;
     text-decoration: none;
     margin-left: 20px;
+    font-size: 20px; /* 글자 크기 추가 */
 }
 
 .navbar-right a:hover {
     color: #009538;
 }
 
+/* 드롭다운 스타일 */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -60,89 +45,81 @@ body {
 .dropbtn {
     background-color: #333;
     color: white;
+    padding: 10px 15px;
+    margin-bottom: 8px;
     border: none;
     cursor: pointer;
-    padding: 10px 20px;
-    font-size: 16px;
+    font-size: 20px;
 }
 
-.dropbtn:hover {
-    background-color: #009538;
-}
-
+/*.dropdown-content {*/
+/*    display: none;*/
+/*    position: absolute;*/
+/*    background-color: white;*/
+/*    min-width: 160px;*/
+/*    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);*/
+/*    z-index: 1;*/
+/*    text-align: left;*/
+/*}*/
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: white;
     min-width: 160px;
-    z-index: 1;
-    border-radius: 4px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    text-align: left;
+    top: 120%; /* 드롭다운이 부모 요소의 아래로 내려오도록 조정 */
 }
 
 .dropdown-content a {
     color: black;
-    padding: 12px 16px;
     text-decoration: none;
     display: block;
+    margin: 0px;
+    padding: 10px 15px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
-.dropdown-content a:hover {
-    background-color: #ddd;
+.dropdown-content a:hover,
+.dropdown-content form button:hover {
+    color: #009538;
 }
 
+/* 드롭다운 메뉴 활성화 */
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-h2 {
-    color: #333;
-    margin-bottom: 10px;
+/* 버튼 hover 스타일 */
+.dropdown:hover .dropbtn {
+    color: #009538;
 }
 
-form .form-group {
-    margin-bottom: 15px;
+/* 로그아웃 버튼 스타일 */
+.logout-form {
+    margin: 0; /* 기본 margin 제거 */
+    padding: 0;
 }
 
-form label {
+/* 로그아웃 버튼 스타일 수정 */
+.dropdown-content form button {
+    all: unset; /* 기본 버튼 스타일 제거 */
+    color: black;
+    text-decoration: none;
     display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-form input[type="text"],
-form input[type="password"],
-form input[type="email"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-form .btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #009538;
-    color: white;
-    border: none;
-    margin-top: 5px;
-    border-radius: 4px;
+    padding: 10px 15px; /* 회원정보와 동일한 패딩 */
+    width: 100%; /* 회원정보와 동일한 너비 */
+    text-align: left; /* 회원정보와 동일한 텍스트 정렬 */
+    font-size: 16px; /* 회원정보와 동일한 폰트 크기 */
+    line-height: 1.5; /* 텍스트 높이 조정 */
     cursor: pointer;
-    font-size: 16px;
 }
 
-form .btn:hover {
-    background-color: #009538;
-}
-
-#passwordMessage {
-    font-size: 0.9em;
-    margin-top: 5px;
-    display: block;
-}
-
-.error {
-    color: red;
-    font-size: 0.9em;
+.dropdown-content form button:hover {
+    color: #009538; /* hover 시 효과 동일 */
 }

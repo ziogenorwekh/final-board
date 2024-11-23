@@ -8,6 +8,21 @@
     <title>Board</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 드롭다운 메뉴 활성화
+            $(".dropbtn").click(function (event) {
+                event.stopPropagation(); // 클릭 이벤트 전파 방지
+                $(this).siblings(".dropdown-content").toggle(); // 드롭다운 토글
+            });
+
+            // 문서의 다른 부분 클릭 시 드롭다운 닫기
+            $(document).click(function () {
+                $(".dropdown-content").hide(); // 드롭다운 숨김
+            });
+        });
+        // $("#logoutDiv").onclick.submit();
+    </script>
 </head>
 <body>
 
@@ -23,24 +38,17 @@
         </span>
         <span sec:authorize="isAuthenticated()">
             <div class="dropdown">
-                <button class="dropbtn" sec:authentication="principal.username">
-                    <span sec:authentication="principal.username">${principal.username}</span>
-                </button>
+                <span class="dropbtn"
+                              sec:authentication="principal.username">${#authentication.getPrincipal().username}</span>
                 <div class="dropdown-content">
-<!--                     수정 필요-->
-                    <a href="/user/{이거수정해야됌}"/>회원정보</a>
-                    <a href="/logout">로그아웃</a>
+                    <a th:href="@{/user/{username}(username=${#authentication.getPrincipal().username})}">회원정보</a>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="logout-btn">로그아웃</button>
+                    </form>
                 </div>
             </div>
         </span>
     </div>
 </nav>
-<script>
-    // 드롭다운 메뉴 활성화
-    $(".dropbtn").click(function () {
-        $(this).next(".dropdown-content").toggle();
-    });
-</script>
-
 </body>
 </html>

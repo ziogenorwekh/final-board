@@ -14,7 +14,7 @@ public class UserCreateCommand {
 
 
     @NotBlank(message = "Username is mandatory")
-    @Size(min = 4, max = 15, message = "Username must be between 4 and 15 characters")
+    @Size(min = 4, max = 12, message = "Username must be between 4 and 12 characters")
     @Schema(description = "Username of the user", example = "john_doe")
     private String username;
 

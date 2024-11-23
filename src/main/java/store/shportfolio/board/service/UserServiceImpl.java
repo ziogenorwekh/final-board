@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserCreateResponse createUser(UserCreateCommand userCreateCommand) {
+        log.info("createUser before information -> {}", userCreateCommand);
         validateDuplicatedEmail(userCreateCommand.getEmail());
         String encodePassword = passwordEncoder.encode(userCreateCommand.getPassword());
         UUID userId = UUID.randomUUID();

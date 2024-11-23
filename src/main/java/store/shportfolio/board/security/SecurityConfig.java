@@ -65,7 +65,7 @@ public class SecurityConfig {
         // 3. 로그아웃 설정
         http.logout(logout -> logout
                 .logoutUrl("/logout") // 로그아웃 URL
-                .logoutSuccessUrl("/login?logout=true") // 로그아웃 성공 시 이동할 URL
+                .logoutSuccessUrl("/") // 로그아웃 성공 시 이동할 URL
                 .permitAll() // 로그아웃 페이지 접근 허용
         );
         // 4. 세션 관리 설정

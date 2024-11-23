@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserEmailDuplicatedException.class)
-    public String handleUserEmailDuplicated(RedirectAttributes redirectAttributes, UserEmailDuplicatedException e) {
-        redirectAttributes.addAttribute("error", e.getMessage());
-        return "redirect:/user/signup";
+    public String handleUserEmailDuplicated(Model model, UserEmailDuplicatedException e) {
+        model.addAttribute("duplicated", e.getMessage());
+        return "signup";
     }
 
 

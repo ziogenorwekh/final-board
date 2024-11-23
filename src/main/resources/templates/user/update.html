@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>비밀번호 변경</title>
+    <link rel="stylesheet" href="/css/userupdate.css">
+    <th:block>
+        <link rel="stylesheet" th:href="@{/css/header.css}">
+    </th:block>
+</head>
+<body>
+<!-- 네비게이션 바 -->
+<div th:insert="~{fragment/header::header}"></div>
+
+<div class="container">
+    <header class="header">
+        <h1>비밀번호 변경</h1>
+    </header>
+
+    <section class="profile-section">
+        <form th:action="@{/user/update}" method="post" th:object="${userUpdateCommand}">
+            <div class="form-group">
+                <label for="currentPassword">현재 비밀번호</label>
+                <input type="password" id="currentPassword" name="currentPassword" placeholder="현재 비밀번호" required>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">새 비밀번호</label>
+                <input type="password" id="newPassword" name="newPassword" placeholder="새 비밀번호" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn">비밀번호 변경</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<footer class="footer">
+    <p>© 2024 Your Company. All rights reserved.</p>
+</footer>
+
+<script>
+</script>
+</body>
+</html>

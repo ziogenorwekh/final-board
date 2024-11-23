@@ -6,8 +6,8 @@ body {
 }
 
 .container {
-    max-width: 500px;
-    margin: 50px auto;
+    max-width: 400px;
+    margin: 80px auto;
     background: white;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -21,24 +21,23 @@ body {
     margin-bottom: 20px;
 }
 
-h2 {
-    color: #333;
-    margin-bottom: 10px;
+.profile-section {
+    margin-top: 20px;
 }
 
-form .form-group {
-    margin-bottom: 15px;
+.form-group {
+    margin-bottom: 20px;
 }
 
-form label {
-    display: block;
+.form-group label {
     font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    display: block;
     margin-bottom: 5px;
 }
 
-form input[type="text"],
-form input[type="password"],
-form input[type="email"] {
+form input[type="password"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -46,30 +45,32 @@ form input[type="email"] {
     box-sizing: border-box;
 }
 
-form .btn {
+
+.form-group input:focus {
+    border-color: #009538;
+}
+
+.btn {
+    display: block;
     width: 100%;
     padding: 10px;
     background-color: #009538;
     color: white;
     border: none;
-    margin-top: 5px;
     border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 10px;
+    font-size: 14px;
 }
 
-form .btn:hover {
-    background-color: #009538;
+.btn:hover {
+    background-color: #007a3b;
 }
 
-#passwordMessage {
-    font-size: 0.9em;
-    margin-top: 5px;
-    display: block;
-}
-
-.error {
-    margin-top: 3px;
-    color: red;
-    font-size: 0.9em;
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #777;
 }

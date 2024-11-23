@@ -28,31 +28,23 @@ public class UserController {
         this.userService = userService;
         this.customCacheManager = customCacheManager;
     }
-//
-//    @GetMapping("/")
-//    public String home() {
-//        log.debug("home page");
-//        return "home";
-//    }
 
-//    @GetMapping("/login")
-//    public String login(Model model) {
-//        model.addAttribute("loginVO", loginVO);
-//        log.debug("login page");
-//        return "login";
-//    }
-//
-//    @GetMapping("/signup")
-//    public String emailCheck() {
-//        log.debug("email check");
-//        return "signup";
-//    }
+    @GetMapping("/user/update")
+    public String updateUser(Model model, UserUpdateCommand userUpdateCommand,
+                             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (customUserDetails == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("userUpdateCommand", userUpdateCommand);
+        return "user/update";
+    }
+
 
     @GetMapping("/signup/form")
     public String showSignupForm(Model model, UserCreateCommand userCreateCommand, HttpSession session) {
         String sessionEmail = customCacheManager.getVerifiedEmailWithSession(session.getId());
         if (sessionEmail == null) {
-            log.error("이메일 인증을 다시 해야 합니다.");
+            log.error("이메일 인증을 해야 합니다.");
             return "redirect:/signup";
         }
         model.addAttribute("userCreateCommand", userCreateCommand);
@@ -89,12 +81,10 @@ public class UserController {
         return "user/profile";
     }
 
-    @PutMapping("/user/update")
+    @PostMapping("/user/update")
     public String updateUser(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                              @ModelAttribute UserUpdateCommand userUpdateCommand) {
-        if (!customUserDetails.getId().equals(userUpdateCommand.getUserId())) {
-            throw new UserNotMatchingException("You are not authorized to update this user's information.");
-        }
+        userUpdateCommand.setUserId(customUserDetails.getId());
         userService.updateUser(userUpdateCommand);
         return "redirect:/profile";
     }

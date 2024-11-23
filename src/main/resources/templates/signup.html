@@ -6,6 +6,9 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>이메일 인증</title>
     <link rel="stylesheet" href="/css/signup.css">
+    <th:block>
+        <link rel="stylesheet" th:href="@{/css/header.css}">
+    </th:block>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         let countdownTime = 300;
@@ -97,6 +100,7 @@
     </script>
 </head>
 <body>
+<div th:insert="~{fragment/header::header}"></div>
 <div class="container">
     <header class="header">
         <h1>이메일 인증</h1>
@@ -107,6 +111,7 @@
             <label for="emailVerifier">이메일:</label>
             <input type="email" id="emailVerifier" name="emailVerifier" placeholder="example@domain.com" required>
             <!-- 이메일 값 전달을 위한 hidden 필드 -->
+            <div th:text="${duplicated}" class="error"></div>
             <button type="button" id="sendEmailBtn" class="btn">인증 이메일
                 보내기
             </button>
@@ -117,17 +122,6 @@
                 <p>남은 시간: <span id="timer">05:00</span></p>
             </div>
         </div>
-<!--        <div class="form-group">-->
-<!--            <label for="emailVerifier">이메일:</label>-->
-<!--            <input type="email" id="emailVerifier" name="emailVerifier" placeholder="example@domain.com" required>-->
-<!--            <button type="button" id="sendEmailBtn" class="btn">인증 이메일 보내기</button>-->
-<!--            <div id="emailCodeSection" style="display: none;">-->
-<!--                <label for="emailCode">인증 코드:</label>-->
-<!--                <input type="text" id="emailCode" name="emailCode" placeholder="인증 코드 입력" required>-->
-<!--                <button type="button" id="verifyEmailBtn" class="btn">인증 코드 확인</button>-->
-<!--                <p>남은 시간: <span id="timer">05:00</span></p>-->
-<!--            </div>-->
-<!--        </div>-->
     </form>
 </div>
 </body>

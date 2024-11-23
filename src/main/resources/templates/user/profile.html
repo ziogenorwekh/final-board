@@ -2,11 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta name="_csrf" th:content="${_csrf.token}">
-  <meta name="_csrf_header" th:content="${_csrf.headerName}">
-  <meta charset="UTF-8">
-  <title>User Profile</title>
-  <link rel="stylesheet" href="/css/profile.css">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/css/profile.css">
+    <th:block>
+        <link rel="stylesheet" th:href="@{/css/header.css}">
+    </th:block>
 </head>
 <body>
 <!-- 네비게이션 바 -->
@@ -14,31 +17,33 @@
 
 <!-- 사용자 프로필 컨테이너 -->
 <div class="container">
-  <header class="header">
-    <h1>사용자 프로필</h1>
-  </header>
+    <header class="header">
+        <h1>사용자 프로필</h1>
+    </header>
 
-  <!-- 프로필 섹션 -->
-  <section class="profile-section">
-    <div class="profile-info">
-      <h2>기본 정보</h2>
-      <p><strong>아이디:</strong> <span th:text="${user.username}"></span></p>
-      <p><strong>이메일:</strong> <span th:text="${user.email}"></span></p>
-      <p><strong>생성일자:</strong> <span th:text="${user.createdAt}"></span></p>
-    </div>
+    <!-- 프로필 섹션 -->
+    <section class="profile-section">
+        <div class="profile-info">
+            <h2>기본 정보</h2>
+            <p><strong>아이디:</strong> <span th:text="${user.username}"></span></p>
+            <p><strong>이메일:</strong> <span th:text="${user.email}"></span></p>
+            <p><strong>생성일자:</strong> <span th:text="${user.createdAt}"></span></p>
+        </div>
 
-    <hr>
+        <hr>
 
-    <div class="account-actions">
-      <h2>계정 관리</h2>
-      <a href="/user/update" class="btn">정보 수정</a>
-      <a href="/user/delete" class="btn danger">계정 삭제</a>
-    </div>
-  </section>
+        <div sec:authorize="isAuthenticated()">
+            <div th:if="${#authentication.name == user.username}" class="account-actions">
+                <h2>계정 관리</h2>
+                <a href="/user/update" class="btn">정보 수정</a>
+                <a href="/user/delete" class="btn danger">계정 삭제</a>
+            </div>
+        </div>
+    </section>
 </div>
 
 <footer class="footer">
-  <p>© 2024 Your Company. All rights reserved.</p>
+    <p>© 2024 Your Company. All rights reserved.</p>
 </footer>
 </body>
 </html>

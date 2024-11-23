@@ -23,8 +23,9 @@ body {
 
 .profile-section {
     margin-top: 20px;
+    padding-top: 20px;  /* 상단 여백 추가 */
+    border-top: 1px solid #ddd; /* 프로필 정보와 계정 관리 영역 구분 */
 }
-
 .profile-info {
     margin-bottom: 20px;
 }
@@ -39,15 +40,22 @@ body {
     color: #555;
     margin: 5px 0;
 }
+.account-actions {
+    margin-top: 20px; /* 계정 관리 섹션 위 여백 추가 */
+    padding: 20px 0; /* 충분한 내부 여백 추가 */
+    border-top: 1px solid #ddd; /* 구분선 추가 */
+}
+
 
 .account-actions h2 {
     color: #333;
+    margin-top: 0px;
     margin-bottom: 10px;
 }
 
 .account-actions .btn {
     display: block;
-    width: 100%;
+    width: 93%;
     padding: 10px;
     background-color: #009538;
     color: white;

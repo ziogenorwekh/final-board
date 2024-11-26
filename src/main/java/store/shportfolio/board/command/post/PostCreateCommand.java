@@ -4,14 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class PostCreateCommand {
 
@@ -25,8 +22,6 @@ public class PostCreateCommand {
     private String content;
 
     @Schema(description = "User ID of the post creator", example = "123e4567-e89b-12d3-a456-426614174000")
-    @NotNull
-    @Setter
     private UUID userId;
 
     @Builder

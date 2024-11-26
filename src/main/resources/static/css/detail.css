@@ -1,0 +1,78 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.post-header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.post-meta {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.post-content {
+    margin-bottom: 30px;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px; /* 행 간 간격 */
+}
+
+.button-row {
+    display: flex;
+    gap: 10px; /* "목록으로"와 "수정" 버튼 사이 간격 */
+}
+
+.action-buttons .btn {
+    display: inline-block;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    padding: 8px 16px; /* 버튼 패딩 */
+    max-width: fit-content; /* 버튼 크기를 텍스트에 맞춤 */
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #009538;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+    display: block;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.inline-form {
+    margin: 0;
+}
+
+
+.low-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #777;
+}

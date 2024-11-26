@@ -1,6 +1,7 @@
 package store.shportfolio.board.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import store.shportfolio.board.command.user.*;
 import store.shportfolio.board.domain.Role;
 import store.shportfolio.board.domain.User;
+import store.shportfolio.board.exception.PasswordNotMatchingException;
 import store.shportfolio.board.exception.UserEmailDuplicatedException;
 import store.shportfolio.board.exception.UserNotFoundException;
 import store.shportfolio.board.jpa.RoleEnum;
@@ -72,7 +74,7 @@ public class UserServiceImpl implements UserService {
         User user = new User(userEntity);
         log.info("Updated user with data is : {}", user);
         if (!passwordEncoder.matches(userUpdateCommand.getCurrentPassword(), user.getPassword().getValue())) {
-            throw new IllegalArgumentException("Current password is incorrect");
+            throw new PasswordNotMatchingException("Current password is incorrect");
         }
 
         Password newPassword = new Password(passwordEncoder.encode(userUpdateCommand.getNewPassword()));

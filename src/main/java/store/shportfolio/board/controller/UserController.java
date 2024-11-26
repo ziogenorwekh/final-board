@@ -1,18 +1,20 @@
 package store.shportfolio.board.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import store.shportfolio.board.cache.CustomCacheManager;
 import store.shportfolio.board.command.user.*;
 import store.shportfolio.board.exception.UserNotFoundException;
-import store.shportfolio.board.exception.UserNotMatchingException;
 import store.shportfolio.board.security.CustomUserDetails;
 import store.shportfolio.board.service.UserService;
 
@@ -73,7 +75,7 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/user/{username}")
+    @GetMapping("/user/profile/{username}")
     public String retrieveUser(@PathVariable("username") String username, Model model) {
         UserTrackQuery userTrackQuery = new UserTrackQuery(username);
         UserTrackQueryResponse trackQueryResponse = userService.findUserByUsername(userTrackQuery);
@@ -83,20 +85,36 @@ public class UserController {
 
     @PostMapping("/user/update")
     public String updateUser(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                             @ModelAttribute UserUpdateCommand userUpdateCommand) {
+                             @Valid @ModelAttribute("userUpdateCommand") UserUpdateCommand userUpdateCommand,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.error("errors is -> {}", bindingResult.getAllErrors());
+            return "user/update";
+        }
+
         userUpdateCommand.setUserId(customUserDetails.getId());
         userService.updateUser(userUpdateCommand);
-        return "redirect:/profile";
+        redirectAttributes.addFlashAttribute("updatedUsername", customUserDetails.getUsername());
+        redirectAttributes.addFlashAttribute("successPwdUpdateMessage", "비밀번호가 변경되었습니다.");
+        return "redirect:/user/update";
     }
 
-    @DeleteMapping("/user/delete")
-    public String deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    @PostMapping("/user/delete")
+    public String deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                             HttpServletRequest request,RedirectAttributes redirectAttributes) {
         if (customUserDetails == null) {
             throw new UserNotFoundException("you are not log-in");
         }
         UserDeleteCommand userDeleteCommand = new UserDeleteCommand(customUserDetails.getId());
         userService.deleteUser(userDeleteCommand);
-        return "redirect:/";
+        // 인증 정보 제거
+        SecurityContextHolder.clearContext();
+        // 세션 무효화
+        request.getSession().invalidate();
+
+        redirectAttributes.addFlashAttribute("successfulDeleteUser", customUserDetails.getUsername());
+        return "redirect:/user/profile/" + customUserDetails.getUsername();
     }
 
 

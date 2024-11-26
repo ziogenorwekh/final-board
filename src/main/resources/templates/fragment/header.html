@@ -41,7 +41,7 @@
                 <span class="dropbtn"
                               sec:authentication="principal.username">${#authentication.getPrincipal().username}</span>
                 <div class="dropdown-content">
-                    <a th:href="@{/user/{username}(username=${#authentication.getPrincipal().username})}">회원정보</a>
+                    <a th:href="@{/user/profile/{username}(username=${#authentication.getPrincipal().username})}">회원정보</a>
                     <form th:action="@{/logout}" method="post">
                         <button type="submit" class="logout-btn">로그아웃</button>
                     </form>

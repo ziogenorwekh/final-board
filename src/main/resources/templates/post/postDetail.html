@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <title th:text="${post.title}">게시글 상세</title>
+  <link rel="stylesheet" href="/css/detail.css">
+  <th:block>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+  </th:block>
+</head>
+<body>
+<!-- 네비게이션 바 -->
+<div th:insert="~{fragment/header::header}"></div>
+
+<div class="container">
+  <!-- 게시글 제목 -->
+  <header class="post-header">
+    <h1 th:text="${post.title}">제목</h1>
+    <p class="post-meta">
+      작성자: <span th:text="${post.poster}"></span> |
+      작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span> |
+      수정일: <span th:text="${#temporals.format(post.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>
+    </p>
+  </header>
+
+  <!-- 게시글 내용 -->
+  <section class="post-content">
+    <div th:utext="${post.contents}">내용</div>
+  </section>
+
+  <!-- 버튼 섹션 -->
+  <footer class="post-footer">
+    <div class="action-buttons">
+      <div class="button-row">
+        <div sec:authorize="isAuthenticated()">
+          <div th:if="${post.poster == #authentication.name}">
+            <a th:href="@{/post/update/{id}(id=${post.postId})}" class="btn btn-primary">수정</a>
+          </div>
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+          <div th:if="${post.poster == #authentication.name}">
+            <form th:action="@{/post/delete/{id}(id=${post.postId})}" method="post" class="inline-form">
+              <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+            </form>
+          </div>
+        </div>
+      </div>
+        <a href="/" class="btn btn-secondary">목록으로</a>
+    </div>
+  </footer>
+</div>
+
+<footer class="low-footer">
+  <p>© 2024 Your Company. All rights reserved.</p>
+</footer>
+</body>
+</html>

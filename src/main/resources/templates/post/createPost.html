@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>게시글 작성</title>
+    <link rel="stylesheet" href="/css/createPost.css">
+    <th:block>
+        <link rel="stylesheet" th:href="@{/css/header.css}">
+    </th:block>
+    <!-- CKEditor -->
+    <script src="https://cdn.ckeditor.com/4.20.0/standard/ckeditor.js"></script>
+</head>
+<body>
+<!-- 네비게이션 바 -->
+<div th:insert="~{fragment/header::header}"></div>
+
+<div class="container">
+    <header class="header">
+        <h1>게시글 작성</h1>
+    </header>
+
+    <section class="post-create-section">
+        <form th:action="@{/post/create}" th:object="${postCreateCommand}" method="post" class="create-post-form">
+            <!-- 제목 -->
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" th:field="*{title}" placeholder="제목을 입력하세요" required maxlength="255">
+                <div th:if="${#fields.hasErrors('title')}" class="error-message">
+                    <span th:errors="*{title}"></span>
+                </div>
+            </div>
+
+            <!-- 본문 -->
+            <div class="form-group">
+                <label for="content">본문</label>
+                <textarea id="content" name="content" th:field="*{content}" placeholder="본문 내용을 입력하세요" required></textarea>
+<!--                <p class="error-message" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>-->
+                <div th:if="${#fields.hasErrors('content')}" class="error-message">
+                    <span th:errors="*{content}"></span>
+                </div>
+            </div>
+
+            <!-- 버튼 -->
+            <div class="form-actions">
+                <a href="/" class="btn cancel-btn">취소</a>
+                <button type="submit" class="btn submit-btn">작성 완료</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<footer class="footer">
+    <p>© 2024 Your Company. All rights reserved.</p>
+</footer>
+
+<script>
+    // CKEditor 활성화
+    CKEDITOR.replace('content');
+</script>
+</body>
+</html>

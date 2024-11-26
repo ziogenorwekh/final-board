@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}">
@@ -18,30 +18,45 @@
     <header class="header">
         <h1>비밀번호 변경</h1>
     </header>
-
+    <div id="updated" th:text="${updatedUsername}" hidden></div>
     <section class="profile-section">
         <form th:action="@{/user/update}" method="post" th:object="${userUpdateCommand}">
             <div class="form-group">
                 <label for="currentPassword">현재 비밀번호</label>
-                <input type="password" id="currentPassword" name="currentPassword" placeholder="현재 비밀번호" required>
+                <input type="password" id="currentPassword" name="currentPassword" th:field="*{currentPassword}"
+                       placeholder="현재 비밀번호" required>
+                <div th:if="${#fields.hasErrors('currentPassword')}" class="error">
+                    <span th:errors="*{currentPassword}"></span>
+                </div>
+                <span th:text="${notMatched}" class="error"></span>
             </div>
             <div class="form-group">
                 <label for="newPassword">새 비밀번호</label>
-                <input type="password" id="newPassword" name="newPassword" placeholder="새 비밀번호" required>
+                <input type="password" id="newPassword" name="newPassword" th:field="*{newPassword}"
+                       placeholder="새 비밀번호" required>
+                <div th:if="${#fields.hasErrors('newPassword')}" class="error">
+                    <span th:errors="*{newPassword}"></span>
+                </div>
             </div>
-
             <div class="form-group">
                 <button type="submit" class="btn">비밀번호 변경</button>
             </div>
         </form>
     </section>
 </div>
-
 <footer class="footer">
     <p>© 2024 Your Company. All rights reserved.</p>
 </footer>
 
-<script>
+<script th:if="${successPwdUpdateMessage}" th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function () {
+        alert("비밀번호가 변경되었습니다.");
+        let hrefUsername = document.getElementById('updated').textContent.trim();
+        console.log(hrefUsername);
+        window.location.href = '/user/' + hrefUsername
+    });
+    /*]]>*/
 </script>
 </body>
 </html>

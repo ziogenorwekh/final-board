@@ -2,18 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <meta charset="UTF-8">
+    <title>게시판</title>
     <link rel="stylesheet" href="/css/home.css">
-    <title>Board</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <th:block>
         <link rel="stylesheet" th:href="@{/css/header.css}">
     </th:block>
 </head>
 <body>
+<!-- 네비게이션 바 -->
 <div th:insert="~{fragment/header::header}"></div>
-홈페이지
+
+<div class="container">
+    <header class="header">
+        <h1>게시판</h1>
+        <div class="action-buttons" sec:authorize="isAuthenticated()">
+            <a href="/post/create" class="btn create-post-btn">게시글 작성</a>
+        </div>
+    </header>
+    <hr/>
+
+    <!-- 게시물 목록 -->
+    <section class="post-list">
+        <div class="post" th:each="post : ${posts}">
+            <h2 class="post-title">
+                <a th:href="@{/post/{id}(id=${post.postId})}" th:text="${post.title}"></a>
+            </h2>
+            <p class="post-meta">
+                작성자: <span th:text="${post.poster}"></span> |
+                작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+            </p>
+
+            <!-- 게시물 내용 표시 -->
+            <p class="post-excerpt" th:if="${#strings.length(post.contents) > 15}"
+               th:text="${#strings.substring(post.contents, 0, 15) + '...'}"></p>
+            <p class="post-excerpt" th:unless="${#strings.length(post.contents) > 15}"
+               th:text="${post.contents}"></p>
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    <p>© 2024 Your Company. All rights reserved.</p>
+</footer>
 </body>
 </html>

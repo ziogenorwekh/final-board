@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import store.shportfolio.board.command.post.*;
 import store.shportfolio.board.domain.Post;
 import store.shportfolio.board.exception.PostNotFoundException;
+import store.shportfolio.board.exception.PostNotOwnerException;
 import store.shportfolio.board.jpa.PostEntity;
 import store.shportfolio.board.jpa.PostRepository;
 import store.shportfolio.board.mapper.PostMapper;
@@ -64,6 +65,10 @@ public class PostServiceImpl implements PostService {
         PostEntity postEntity = postRepository.findById(postUpdateCommand.getPostId()).orElseThrow(() ->
                 new PostNotFoundException(String.
                 format("Post with id %s not found", postUpdateCommand.getPostId())));
+        if (!postUpdateCommand.getUserId().equals(postEntity.getUser().getId())) {
+            throw new PostNotOwnerException("you're not post owner.");
+        }
+
         log.info("Updated postId : {}", postEntity.getPostId());
         Post post = new Post(postEntity);
         post.updateTitle(new Title(postUpdateCommand.getTitle()), new UserId(postUpdateCommand.getUserId()));
@@ -77,6 +82,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void deletePost(PostDeleteCommand postDeleteCommand) {
+
         PostEntity postEntity = postRepository
                 .findById(postDeleteCommand.getPostId()).orElseThrow(() -> new PostNotFoundException(String.
                         format("Post with id %s not found", postDeleteCommand.getPostId())));

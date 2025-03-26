@@ -49,7 +49,6 @@ public class PostController {
     public String createPost(@Valid @ModelAttribute("postCreateCommand") PostCreateCommand postCreateCommand,
                              @AuthenticationPrincipal CustomUserDetails customUserDetails, Model model,
                              BindingResult bindingResult) {
-        log.info(customUserDetails.toString());
         if (bindingResult.hasErrors()) {
             log.error("errors is -> {}", bindingResult.getAllErrors());
             return "post/createPost";

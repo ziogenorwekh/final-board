@@ -97,7 +97,7 @@ public class UserController {
         userService.updateUser(userUpdateCommand);
         redirectAttributes.addFlashAttribute("updatedUsername", customUserDetails.getUsername());
         redirectAttributes.addFlashAttribute("successPwdUpdateMessage", "비밀번호가 변경되었습니다.");
-        return "redirect:/user/update";
+        return "redirect:/user/profile/" + customUserDetails.getUsername();
     }
 
     @PostMapping("/user/delete")

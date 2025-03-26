@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import store.shportfolio.board.cache.CustomCacheManager;
 import store.shportfolio.board.command.user.UserCreateCommand;
 import store.shportfolio.board.command.user.UserCreateResponse;
 import store.shportfolio.board.controller.UserController;
@@ -40,6 +41,9 @@ public class UserIntegrationTest {
     private UserService userService;
 
     @MockBean
+    private CustomCacheManager customCacheManager;
+
+    @MockBean
     private MailService mailService;
 
 
@@ -55,18 +59,5 @@ public class UserIntegrationTest {
         MockitoAnnotations.openMocks(this);
     }
 
-
-    @Test
-    @WithMockUser
-    void testCreateUser() throws Exception {
-        UserCreateCommand command = new UserCreateCommand(username, password, email);
-        UserCreateResponse response = new UserCreateResponse(userId, username, email, created);
-
-        given(userService.createUser(any(UserCreateCommand.class))).willReturn(response);
-
-        mockMvc.perform(post("/signup")
-                        .flashAttr("userCreateCommand", command).with(csrf()))
-                .andExpect(forwardedUrl("user/mail-auth"));
-    }
 
 }

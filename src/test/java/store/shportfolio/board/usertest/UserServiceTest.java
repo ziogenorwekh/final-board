@@ -101,7 +101,7 @@ public class UserServiceTest {
         UserTrackQuery userTrackQuery = new UserTrackQuery(username);
         UserEntity mockUserEntity = Mockito.mock(UserEntity.class);
 
-        Mockito.when(userRepository.findById(Mockito.eq(userId))).thenReturn(Optional.of(mockUserEntity));
+        Mockito.when(userRepository.findByUsername(Mockito.eq(username))).thenReturn(Optional.of(mockUserEntity));
 
         Mockito.when(userMapper.toUserTrackQueryResponse(Mockito.any(User.class)))
                 .thenReturn(UserTrackQueryResponse.builder()
@@ -116,7 +116,7 @@ public class UserServiceTest {
 
         // then
         Assertions.assertNotNull(response);
-        Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.eq(userId));
+        Mockito.verify(userRepository, Mockito.times(1)).findByUsername(Mockito.eq(username));
         Mockito.verify(userMapper, Mockito.times(1)).toUserTrackQueryResponse(Mockito.any(User.class));
     }
 

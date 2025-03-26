@@ -52,25 +52,16 @@ body {
     font-size: 20px;
 }
 
-/*.dropdown-content {*/
-/*    display: none;*/
-/*    position: absolute;*/
-/*    background-color: white;*/
-/*    min-width: 160px;*/
-/*    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);*/
-/*    z-index: 1;*/
-/*    text-align: left;*/
-/*}*/
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: white;
     min-width: 160px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    text-align: left;
-    top: 120%; /* 드롭다운이 부모 요소의 아래로 내려오도록 조정 */
+    right: 0;
 }
+
 
 .dropdown-content a {
     color: black;

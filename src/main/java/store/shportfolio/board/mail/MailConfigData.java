@@ -15,5 +15,4 @@ public class MailConfigData {
     private String username;
     private String password;
     private Properties properties = new Properties();
-
 }
